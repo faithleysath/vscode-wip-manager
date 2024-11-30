@@ -2,7 +2,7 @@
   "name": "wip-manager",
   "displayName": "WIP-Manager",
   "description": "基于wip分支进行代码同步的git工具",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "repository": "https://github.com/faithleysath/vscode-wip-manager",
   "publisher": "faithleysath",
   "engines": {
