@@ -75,21 +75,6 @@ const intervalId = setInterval(() => {
 
 
 export function activate(context: vscode.ExtensionContext) {
-    if (!hasWIP && current_branch === 'main') {
-        console.log("检测到当前无wip分支，创建一个！");
-        fs.writeFileSync(path.join(current_working_dir, "wip"), "Off");
-        exec("git add . && git commit -am 'wip: initialize' && git push && git checkout -b wip && git push -u origin wip && git checkout main", options, (error, stdout, stderr) => {
-            if (error) {
-                console.error(`执行错误: ${error}`);
-                return;
-              }
-              console.log(`stdout: ${stdout}`);
-              console.error(`stderr: ${stderr}`);
-        });
-        hasWIP = true;
-        console.log("wip分支创建完成！");
-    }
-
     if (current_branch === 'wip') {
         exec("git pull", options, (error, stdout, stderr) => {
             if (error) {
@@ -147,7 +132,23 @@ function createStatusBar(context: vscode.ExtensionContext) {
             if (isWipEnabled) {
                 wip2main();
             } else {
-                main2wip();
+                if (!hasWIP && current_branch === 'main') {
+                    console.log("检测到当前无wip分支，创建一个！");
+                    fs.writeFileSync(path.join(current_working_dir, "wip"), "Off");
+                    exec("git add . && git commit -am 'wip: initialize' && git push && git checkout -b wip && git push -u origin wip && git checkout main", options, (error, stdout, stderr) => {
+                        if (error) {
+                            console.error(`执行错误: ${error}`);
+                            return;
+                          }
+                          console.log(`stdout: ${stdout}`);
+                          console.error(`stderr: ${stderr}`);
+                          main2wip();
+                    });
+                    hasWIP = true;
+                    console.log("wip分支创建完成！");
+                } else {
+                    main2wip();
+                }
             }
             isWipEnabled = !isWipEnabled;
             updateStatusBar();
