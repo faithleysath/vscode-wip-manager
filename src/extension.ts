@@ -135,7 +135,7 @@ function createStatusBar(context: vscode.ExtensionContext) {
                 if (!hasWIP && current_branch === 'main') {
                     console.log("检测到当前无wip分支，创建一个！");
                     fs.writeFileSync(path.join(current_working_dir, "wip"), "Off");
-                    exec("git add . && git commit -am 'wip: initialize' && git push && git checkout -b wip && git push -u origin wip && git checkout main", options, (error, stdout, stderr) => {
+                    exec('git add . && git commit -m "wip: initialize" && git push && git checkout -b wip && git push -u origin wip && git checkout main', options, (error, stdout, stderr) => {
                         if (error) {
                             console.error(`执行错误: ${error}`);
                             return;
